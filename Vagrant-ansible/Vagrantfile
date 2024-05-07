@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-16.04"
+  #Defino el nombre del nodo controlador
+  config.vm.define "Ubuntu16-ansible" do |node| 
+    config.vm.hostname = "Ubuntu16-ansible"
+    #Agrego interfaz de red y defino ip privada
+    config.vm.network "private_network", ip: "192.168.56.10"
+    #Configuro carpeta compartida entre el host y la MV
+      config.vm.synced_folder "compartido", "/home/vagrant/proyecto-GM"
+    #Aprovisiono ansible a la MV una vez se crea 
+      config.vm.provision "shell", path: "install-ansible.sh"
+     #Indico que el proveedor será VirtualBox y la memoria ram de 500gb y 1cpu
+      config.vm.provider "virtualbox" do |v|
+          v.memory = 512 
+          v.cpus = 1
+      end
+  
+  end
+end

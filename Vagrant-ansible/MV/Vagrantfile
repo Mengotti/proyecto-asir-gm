@@ -1,0 +1,43 @@
+
+box_image = "bento/ubuntu-16.04"
+
+
+Vagrant.configure("2") do |config|
+
+#Defino maquina controlador de Ansible
+    config.vm.define "Controlador-Ansible" do |controlador|
+        controlador.vm.box = box_image
+        controlador.vm.hostname = "gm-controlador"
+        controlador.vm.network "private_network", ip: "192.168.56.10"
+        controlador.vm.synced_folder "compartido", "/home/vagrant/proyecto-GM"
+        controlador.vm.provision "shell", path: "install-ansible.sh" 
+        controlador.vm.provider "virtualbox" do |v|
+            v.memory = 512 
+            v.cpus = 1
+        end
+    end  
+
+
+#Defino nodo1 de Ansible
+    config.vm.define "Nodo1" do |nodo|
+        nodo.vm.box = box_image
+        nodo.vm.hostname = "gm-nodo1"
+        nodo.vm.network "private_network", ip: "192.168.56.21"
+        nodo.vm.provider "virtualbox" do |v|
+            v.memory = 512
+            v.cpus = 1
+         end
+    end 
+
+#Defino nodo2 de Ansible
+    config.vm.define "Nodo2" do |nodo|
+        nodo.vm.box = box_image
+        nodo.vm.hostname = "gm-nodo2"
+        nodo.vm.network "private_network", ip: "192.168.56.22"
+        nodo.vm.provider "virtualbox" do |v|
+            v.memory = 512
+            v.cpus = 1
+         end
+    end 
+
+end 
